@@ -6,7 +6,7 @@
 /*   By: abdul-rashed <abdul-rashed@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:02:24 by abdul-rashe       #+#    #+#             */
-/*   Updated: 2024/09/16 00:02:27 by abdul-rashe      ###   ########.fr       */
+/*   Updated: 2024/09/19 22:15:00 by abdul-rashe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,21 @@ long long int	ft_atoi_long(char *nptr)
 	return (sign * result);
 }
 
+void	exit_error(t_commands *commands, int i)
+{
+	if (i == 0)
+	{
+		ft_putstr_fd("minishell: Exit: ", 2);
+		ft_putendl_fd(": too many arguments", 2);
+	}
+	if (i == 1)
+	{
+		ft_putstr_fd("minishell: Exit: ", 2);
+		ft_putstr_fd(commands->fcommand[i - 1]->command[1], 2);
+		ft_putendl_fd(": numeric argument required", 2);
+	}
+}
+
 int	exit_minishell(t_commands *commands, int i)
 {
 	if (commands->fcommand[i - 1]->command[1])
@@ -73,14 +88,13 @@ int	exit_minishell(t_commands *commands, int i)
 		if (commands->fcommand[i - 1]->command[2]
 			&& !ft_isnumeric(commands->fcommand[i - 1]->command[1]))
 		{
-			write(2, "exit\nminishell: Exit: too many arguments\n", 41);
+			exit_error(commands, 0);
 			commands->status = 1;
 			return (0);
 		}
 		else if (ft_isnumeric(commands->fcommand[i - 1]->command[1]))
 		{
-			write(2, "exit\nminishell: Exit: a numeric argument is required\n",
-				53);
+			exit_error(commands, 1);
 			commands->status = 2;
 			if (commands->fcommand[i - 1]->command[2])
 				return (1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_and_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abdul-rashed <abdul-rashed@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 17:10:29 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/19 19:55:56 by ajamshid         ###   ########.fr       */
+/*   Updated: 2024/09/19 21:37:53 by abdul-rashe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ char	*find_value_of_env2(t_env *env, char *name)
 
 int	check_name(char *name)
 {
-	if (ft_strchr(name, '-') || ft_isdigit(name[0]))
+	if (!name || !name[0] || ft_strchr(name, '-') || ft_isdigit(name[0]))
 	{
-		put_str_fd("minishell:", 2);
+		ft_putstr_fd("minishell:", 2);
 		ft_putendl_fd(" not a valid identifier", 2);
 		return (1);
 	}

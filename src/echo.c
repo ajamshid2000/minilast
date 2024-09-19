@@ -6,7 +6,7 @@
 /*   By: abdul-rashed <abdul-rashed@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 17:24:10 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/18 20:32:09 by abdul-rashe      ###   ########.fr       */
+/*   Updated: 2024/09/19 22:11:45 by abdul-rashe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,11 @@ int	echo(char **command, int out_fd, t_commands *commands)
 
 	i = 0;
 	j = 0;
+	if (!command || !command[0])
+	{
+		write(1, "\n", 1);
+		return (0);
+	}
 	if (!ft_strcmp(command[i], "-n"))
 		j = 1;
 	if (j == 1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abdul-rashed <abdul-rashed@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 17:18:05 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/19 19:56:44 by ajamshid         ###   ########.fr       */
+/*   Updated: 2024/09/19 21:38:25 by abdul-rashe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,10 @@ int	export_one(t_env *env, char *name, char *value, int out_fd)
 	t_env	*temp;
 	char	**str;
 
+	if (check_name(name) == 1)
+		return (1);
 	if (name && name[0])
 	{
-		if (check_name(name) == 1)
-			return (1);
 		temp = locate_env(env, name);
 		if (temp)
 		{
