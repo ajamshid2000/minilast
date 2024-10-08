@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/30 09:11:06 by famana           ###   ########.fr       */
+/*   Updated: 2024/10/08 16:05:39 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	my_free_cmd(t_commands *commands)
 		i++;
 	}
 	free(commands->fcommand);
+	free(commands->child_pid);
 	free(commands);
 }
 

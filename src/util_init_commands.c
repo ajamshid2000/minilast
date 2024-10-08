@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util_init_commands.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/27 10:33:07 by famana           ###   ########.fr       */
+/*   Updated: 2024/10/08 16:28:45 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,6 @@ void	init_commands(t_commands *commands)
 	commands->env = NULL;
 	commands->fcommand = NULL;
 	commands->pipe_count = 0;
+	commands->child_pid = (int *)malloc(sizeof(int) + 100);
+	commands->child_pid[0] = 0;
 }

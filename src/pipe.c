@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 18:58:30 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/30 13:28:02 by ajamshid         ###   ########.fr       */
+/*   Updated: 2024/10/08 19:39:54 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,32 @@
 
 void	execute_cur_command(t_commands *commands, int **pipe_fd, int j, int i)
 {
-	t_fcommand	*command;
-
 	(void)j;
-	command = commands->fcommand[i];
-	if (i == commands->pipe_count && !(command->redirections
-			&& ((command->redirections->out && command->redirections->out[0])
-				|| (command->redirections->append
-					&& command->redirections->append[0]))))
+	if (i == 0 && i == commands->pipe_count)
 	{
-		if ((!is_builtin(commands->fcommand[i]->command)
-				&& commands->pipe_count == i))
-		{
-			execute_builtin(commands->env, commands, i, 1);
-			commands->j--;
-		}
-		else
-		{
-			if (!commands->fcommand[i]->redirections && i == 0)
-				execute_command(commands, i, 0, 1);
-			else
-				execute_command(commands, i, pipe_fd[i][0], 1);
-		}
+		execute_command(commands, i, 0, 1);
+	}
+	else if (i == 0)
+	{
+		execute_command(commands, i, 0, pipe_fd[i][1]);
+	}
+	else if (i == commands->pipe_count)
+	{
+		execute_command(commands, i, pipe_fd[i - 1][0], 1);
 	}
 	else
-		execute_command(commands, i, pipe_fd[i][0], pipe_fd[i + 1][1]);
+	{
+		execute_command(commands, i, pipe_fd[i - 1][0], pipe_fd[i][1]);
+	}
 }
 
 int	execute_and_redirect(t_commands *commands, int **pipe_fd, int i)
 {
 	t_fcommand	*command;
 	int			set_fd_return_value;
+	int			original_stdout;
 
+	original_stdout = dup(1);
 	set_fd_return_value = commands->fcommand[i]->error;
 	(void)command;
 	commands->status = set_fd_return_value;
@@ -57,23 +51,49 @@ int	execute_and_redirect(t_commands *commands, int **pipe_fd, int i)
 	}
 	else
 	{
-		execute_cur_command(commands, pipe_fd, set_fd_return_value, i);
-		close(pipe_fd[i][1]);
+		if ((!is_builtin(commands->fcommand[i]->command)
+				&& commands->pipe_count == 0))
+		{
+			if (commands->fcommand[i]->redirections
+				&& commands->fcommand[i]->redirections->last_out != 0)
+				redirect_out(commands, i, pipe_fd[i][1]);
+			execute_builtin(commands->env, commands, i, 1);
+			close(pipe_fd[i][1]);
+			dup2(original_stdout, 1);
+			commands->j--;
+		}
+		else
+			execute_cur_command(commands, pipe_fd, set_fd_return_value, i);
+		// close(pipe_fd[i][1]);
 	}
 	return (0);
 }
 
 int	close_pipes_and_wait(t_commands *commands, int i)
 {
-	close(commands->pipe_fd[i][1]);
-	close(commands->pipe_fd[i][0]);
+	int	pid;
+	int	j;
+
+	// close(commands->pipe_fd[i][1]);
+	// close(commands->pipe_fd[i][0]);
 	i = 0;
 	while (i <= commands->j)
 	{
 		if (!commands->status)
 		{
-			wait(&commands->status);
+			j = 0;
+			pid = wait(&commands->status);
 			commands->status = WEXITSTATUS(commands->status);
+			while (commands->child_pid[j] != pid)
+				j++;
+			// ft_printf("%i has terminated", j);
+			// while (j >= 0)
+			// {
+			close(commands->pipe_fd[j][1]);
+			commands->child_pid[j] = 0;
+			// 	j--;
+			// }
+			// close(commands->pipe_fd[i+2][1]);
 		}
 		else
 			wait(0);
@@ -106,6 +126,9 @@ int	execute_pipe(t_commands *commands)
 			close(commands->pipe_fd[i][0]);
 		i++;
 	}
+	// close(commands->pipe_fd[0][1]);
+	// close(commands->pipe_fd[1][1]);
+	// close(commands->pipe_fd[2][1]);
 	close_pipes_and_wait(commands, i);
 	return (0);
 }
@@ -124,8 +147,7 @@ int	execute_pipes(t_commands *commands)
 	}
 	execute_pipe(commands);
 	if (commands->fcommand[i - 1]->command && commands->fcommand[i
-			- 1]->command[0]
-		&& !ft_strcmp(commands->fcommand[i - 1]->command[0],
+		- 1]->command[0] && !ft_strcmp(commands->fcommand[i - 1]->command[0],
 			"exit"))
 	{
 		return (exit_minishell(commands, i));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdul-rashed <abdul-rashed@student.42.f    +#+  +:+       +#+        */
+/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 17:23:29 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/27 20:05:42 by abdul-rashe      ###   ########.fr       */
+/*   Updated: 2024/10/08 18:22:28 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	free_all(t_commands *commands, char **environ)
 			i++;
 		}
 		free(commands->fcommand);
+		free(commands->child_pid);
 		free(commands);
 	}
 	rl_clear_history();

@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 19:08:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/30 12:45:23 by ajamshid         ###   ########.fr       */
+/*   Updated: 2024/10/08 19:32:50 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ void	print_error_read(char *name)
 	fd = open(name, O_RDONLY);
 	folder = opendir(name);
 	if (fd == -1 && folder == NULL)
-		ft_putendl_fd(": No such file or directory", 2);
+		ft_putendl_fd("No such file or directory", 2);
 	if (fd == -1 && folder != NULL)
-		ft_putendl_fd(": is a directory", 2);
+		ft_putendl_fd("is a directory", 2);
 	if (folder)
 		closedir(folder);
 	if (fd != -1)

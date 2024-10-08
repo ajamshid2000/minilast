@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/30 13:04:08 by ajamshid         ###   ########.fr       */
+/*   Updated: 2024/10/08 18:36:05 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_commands
 	int				status;
 	int				j;
 	int				last_fd;
+	int				*child_pid;
 	t_env			*env;
 	t_fcommand		**fcommand;
 	int				**pipe_fd;
@@ -125,6 +126,8 @@ void				knock_out_char(char *str, char c);
 int					check_name(char *name);
 void				redirect_commands(t_commands *commands, int i, int in_fd,
 						int out_fd);
+void				redirect_in(t_commands *commands, int i, int in_fd);
+void				redirect_out(t_commands *commands, int i, int out_fd);
 
 /* -----------*/
 extern int			g_ctrl_c_status;
