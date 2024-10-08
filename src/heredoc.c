@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/14 07:26:00 by famana           ###   ########.fr       */
+/*   Updated: 2024/09/30 13:08:13 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	append_line_to_content(char *content, const char *line,
 		size_t *content_size)
 {
 	ft_strcat(content, line);
+	ft_strcat(content, "\n");
 	*content_size += ft_strlen(line) + 1;
 }
 

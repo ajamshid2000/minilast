@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdul-rashed <abdul-rashed@student.42.f    +#+  +:+       +#+        */
+/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 17:24:10 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/19 22:11:45 by abdul-rashe      ###   ########.fr       */
+/*   Updated: 2024/09/30 13:06:33 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,15 @@ int	echo(char **command, int out_fd, t_commands *commands)
 		print_n(command, out_fd, commands);
 	if (j != 1)
 		print(command, out_fd, commands);
+	return (0);
+}
+
+int	echo_here(char *here, t_commands *commands)
+{
+	if (here)
+	{
+		ft_putstr_fd(here, 1);
+	}
+	commands->status = 0;
 	return (0);
 }

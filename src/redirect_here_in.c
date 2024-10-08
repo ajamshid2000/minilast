@@ -3,36 +3,82 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_here_in.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdul-rashed <abdul-rashed@student.42.f    +#+  +:+       +#+        */
+/*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:15:49 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/18 22:38:44 by abdul-rashe      ###   ########.fr       */
+/*   Updated: 2024/10/01 07:17:09 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-int	write_from_in(int temp, int write_end)
+void	redirect_in(t_commands *commands, int i, int in_fd)
 {
-	int		j;
-	char	buffer[512];
+	int	open_fd;
 
-	j = 1;
-	ft_bzero(buffer, 512);
-	while (j > 0)
+	if (commands->fcommand[i]->redirections->last_in == 1)
 	{
-		j = read(temp, buffer, sizeof(buffer));
-		if (j == -1)
-		{
-			perror("minishell: read");
-			return (-1);
-		}
-		if (j == 0)
-			break ;
-		write(write_end, buffer, j);
+		ft_putstr_fd(commands->fcommand[i]->redirections->here,
+			commands->pipe_fd[i][1]);
+		dup2(in_fd, 0);
+		if (in_fd)
+			close(in_fd);
 	}
-	return (0);
+	else
+	{
+		open_fd = open(commands->fcommand[i]->redirections->last_in_name,
+				O_RDONLY);
+		dup2(open_fd, 0);
+		close(open_fd);
+		if (in_fd)
+			close(in_fd);
+	}
+}
+
+void	redirect_out(t_commands *commands, int i, int out_fd)
+{
+	int	open_fd;
+
+	open_fd = -1;
+	if (commands->fcommand[i]->redirections->last_out == 1)
+	{
+		open_fd = open(commands->fcommand[i]->redirections->last_out_name,
+				O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR);
+	}
+	else if (commands->fcommand[i]->redirections->last_out == 2)
+	{
+		open_fd = open(commands->fcommand[i]->redirections->last_out_name,
+				O_CREAT | O_RDWR | O_TRUNC, S_IRUSR | S_IWUSR);
+	}
+	dup2(open_fd, 1);
+	close(open_fd);
+	if (out_fd != 1)
+		close(out_fd);
+}
+
+void	redirect_commands(t_commands *commands, int i, int in_fd, int out_fd)
+{
+	if (commands->fcommand[i]->redirections
+		&& commands->fcommand[i]->redirections->last_in != 0)
+		redirect_in(commands, i, in_fd);
+	else
+	{
+		if (in_fd)
+			dup2(in_fd, 0);
+		if (in_fd)
+			close(in_fd);
+	}
+	if (commands->fcommand[i]->redirections
+		&& commands->fcommand[i]->redirections->last_out != 0)
+		redirect_out(commands, i, out_fd);
+	else
+	{
+		if (out_fd != 1)
+			dup2(out_fd, 1);
+		if (out_fd != 1)
+			close(out_fd);
+	}
 }
 
 int	set_fd(t_fcommand *command, int write_end)
@@ -50,14 +96,9 @@ int	set_fd(t_fcommand *command, int write_end)
 			print_error_read(command->redirections->in[i]);
 			return (1);
 		}
-		// if (write_from_in(temp, write_end) == -1)
-		// 	return (1);
 		close(temp);
 		i++;
 	}
 	(void)write_end;
-	// if (command->redirections && command->redirections->here
-	// 	&& command->redirections->here[0])
-	// 	ft_putstr_fd(command->redirections->here, write_end);
 	return (0);
 }

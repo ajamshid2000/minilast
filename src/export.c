@@ -6,7 +6,7 @@
 /*   By: abdul-rashed <abdul-rashed@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 17:18:05 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/19 21:38:25 by abdul-rashe      ###   ########.fr       */
+/*   Updated: 2024/09/20 00:00:19 by abdul-rashe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ int	print_export(char **str, int out_fd)
 	i = 0;
 	while (i < n)
 	{
-		// ft_putstr_fd(str[i], out_fd);
-		// ft_putstr_fd("\n", out_fd);
 		(void)out_fd;
 		i++;
 	}

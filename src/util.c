@@ -6,7 +6,7 @@
 /*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/12 08:55:04 by famana           ###   ########.fr       */
+/*   Updated: 2024/10/01 06:54:36 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	ft_isspace(int c)
 		|| c == '\r');
 }
 
-// Implementation of ft_strndup
 char	*ft_strndup(const char *s, size_t n)
 {
 	size_t	len;
@@ -63,7 +62,6 @@ char	*ft_strndup(const char *s, size_t n)
 /** Custom realloc function */
 void	*my_realloc(void *ptr, size_t new_size, size_t old_size)
 {
-	size_t	copy_size;
 	void	*new_ptr;
 
 	if (new_size == 0)
@@ -71,19 +69,19 @@ void	*my_realloc(void *ptr, size_t new_size, size_t old_size)
 		free(ptr);
 		return (NULL);
 	}
+	if (new_size <= old_size)
+	{
+		return (ptr);
+	}
 	if (ptr == NULL)
-		return (malloc(new_size));
-	new_ptr = malloc(new_size);
+		return (ft_calloc(1, new_size));
+	new_ptr = ft_calloc(1, new_size);
 	if (new_ptr == NULL)
 	{
-		perror("malloc failed");
+		perror("calloc failed");
 		return (NULL);
 	}
-	if (old_size < new_size)
-		copy_size = old_size;
-	else
-		copy_size = new_size;
-	ft_memcpy(new_ptr, ptr, copy_size);
+	ft_memcpy(new_ptr, ptr, old_size);
 	free(ptr);
 	return (new_ptr);
 }

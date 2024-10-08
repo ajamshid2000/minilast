@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util_init_commands.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdul-rashed <abdul-rashed@student.42.f    +#+  +:+       +#+        */
+/*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/18 23:39:12 by abdul-rashe      ###   ########.fr       */
+/*   Updated: 2024/09/27 10:33:07 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,16 @@ int	count_pipes(char **cmd)
 }
 
 /* Function to initialize commands and environment */
-void	initialize_commands_and_env(t_commands **commands, t_env **env,
+t_commands	*initialize_commands_and_env(t_commands **commands, t_env **env,
 		char **splited_command)
 {
 	*commands = create_and_init_commands();
+	if (*commands == NULL)
+		return (NULL);
 	(*commands)->env = *env;
 	(*commands)->pipe_count = count_pipes(splited_command);
 	(*commands)->fcommand = NULL;
+	return (*commands);
 }
 
 /* Function to initialize a newly allocated t_commands structure*/

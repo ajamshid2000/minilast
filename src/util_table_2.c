@@ -6,7 +6,7 @@
 /*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/11 08:03:10 by famana           ###   ########.fr       */
+/*   Updated: 2024/10/01 07:18:33 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,39 +30,6 @@ char	**ft_realloc_table(char **table, int new_count, int old_count)
 	free(table);
 	return (new_table);
 }
-
-/* Helper function to add a string to a NULL-terminated array of strings */
-/*
-char	**add_string_to_array(char **array, char *new_string)
-{
-	size_t	count;
-	char	**new_array;
-
-	if (!new_string)
-	{
-		printf("Invalid string provided: NULL string cannot be added.\n");
-		return (array);
-	}
-	count = 0;
-	while (array && array[count])
-		count++;
-	new_array = realloc(array, sizeof(char *) * (count + 2));
-	if (!new_array)
-	{
-		printf("Memory allocation failed while adding string to array.\n");
-		return (array);
-	}
-	new_array[count] = ft_strdup(new_string);
-	if (!new_array[count])
-	{
-		printf("Memory allocation failed while duplicating string.\n");
-		new_array[count] = NULL;
-		return (new_array);
-	}
-	new_array[count + 1] = NULL;
-	return (new_array);
-}
-*/
 
 /* Function to calculate the size of a NULL-terminated array of strings */
 size_t	get_array_size(char **array)

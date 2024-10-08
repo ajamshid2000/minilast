@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quote_util.c                                       :+:      :+:    :+:   */
+/*   util_quote.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/09 10:19:14 by famana           ###   ########.fr       */
+/*   Updated: 2024/09/20 10:31:52 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,10 @@ int	is_in_quote_simple(char *string, size_t i)
 		j++;
 	}
 	return (in_single_quote);
+}
+
+int	is_quote_escaped(char *string, size_t i)
+{
+	return ((is_in_quote_simple(string, i) == 1 || is_in_double_quote(string,
+				i) == 1 || is_escaped(string, i) == 1));
 }

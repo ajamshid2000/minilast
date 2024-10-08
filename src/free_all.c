@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abdul-rashed <abdul-rashed@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 17:23:29 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/06 11:58:56 by famana           ###   ########.fr       */
+/*   Updated: 2024/09/27 20:05:42 by abdul-rashe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,13 @@ int	free_pipe(t_commands *commands)
 	int	i;
 
 	i = 0;
-	while (i <= commands->pipe_count)
+	while (i <= commands->pipe_count + 1)
 	{
+		close(commands->pipe_fd[i][0]);
+		close(commands->pipe_fd[i][1]);
 		free(commands->pipe_fd[i]);
 		i++;
 	}
-	free(commands->pipe_fd[i]);
 	free(commands->pipe_fd);
 	return (0);
 }
@@ -97,7 +98,6 @@ int	free_all(t_commands *commands, char **environ)
 	if (commands)
 	{
 		free_env_stack(commands->env);
-		free_pipe(commands);
 		i = 0;
 		free_redirections(commands);
 		while ((commands->fcommand[i]))

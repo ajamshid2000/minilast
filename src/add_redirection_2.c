@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   add_redirection_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/19 16:54:55 by ajamshid         ###   ########.fr       */
+/*   Updated: 2024/10/01 07:12:38 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
-
 
 int	check_validity_of_infile(char *name)
 {
@@ -28,20 +27,27 @@ int	check_validity_of_infile(char *name)
 	return (0);
 }
 
-/* Main function decomposed into smaller functions */
-void	add_in(t_commands *commands, int id_cmd, char *filename)
+t_commands	*add_in(t_commands *commands, int id_cmd, char *filename)
 {
-	// printf("%s", filename);
-	initialize_fcommand_array(commands);
-	initialize_fcommand_element(commands, id_cmd);
-	initialize_redirections(commands, id_cmd);
+	commands = initialize_fcommand_array(commands);
+	if (commands == NULL)
+		return (NULL);
+	commands = initialize_fcommand_element(commands, id_cmd);
+	if (commands == NULL)
+		return (NULL);
+	commands = initialize_redirections(commands, id_cmd);
+	if (commands == NULL)
+		return (NULL);
 	if (commands->fcommand[id_cmd]->error == 1)
-		return ;
+		return (commands);
 	knock_out_char(filename, '"');
-	add_input_redirection(commands, id_cmd, filename);
+	commands = add_input_redirection(commands, id_cmd, filename);
+	if (commands == NULL)
+		return (NULL);
 	if (check_validity_of_infile(filename))
 		commands->fcommand[id_cmd]->error = 1;
 	commands->fcommand[id_cmd]->redirections->last_in = 2;
+	return (commands);
 }
 
 /* Function to check the validity of input arguments */
@@ -73,6 +79,8 @@ int	ensure_redirections_initialized(t_commands *commands, int id_cmd)
 		commands->fcommand[id_cmd]->redirections->append = NULL;
 		commands->fcommand[id_cmd]->redirections->in = NULL;
 		commands->fcommand[id_cmd]->redirections->here = NULL;
+		commands->fcommand[id_cmd]->redirections->last_in = 0;
+		commands->fcommand[id_cmd]->redirections->last_out = 0;
 	}
 	return (1);
 }
@@ -104,16 +112,4 @@ void	allocate_or_append_heredoc_content(char **here_field,
 		ft_strcat(new_here, heredoc_content);
 		*here_field = new_here;
 	}
-}
-
-/* Function to handle here-document content addition */
-void	handle_heredoc_content(t_commands *commands, int id_cmd,
-		char *heredoc_content)
-{
-	if (!ensure_redirections_initialized(commands, id_cmd))
-	{
-		return ;
-	}
-	allocate_or_append_heredoc_content(&commands->fcommand[id_cmd]->redirections->here,
-		heredoc_content);
 }

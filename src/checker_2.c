@@ -6,7 +6,7 @@
 /*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/18 08:55:31 by famana           ###   ########.fr       */
+/*   Updated: 2024/10/01 07:13:15 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,68 +41,57 @@ int	is_only_space(char *str)
 	return (1);
 }
 
-int	is_in_quote_simple(char *string, size_t i);
-int	is_in_double_quote(char *string, size_t i);
-int	is_escaped(char *string, size_t i);
-
-int is_quote_escaped(char *string, size_t i){
-    return !(is_in_quote_simple(string,i)==0 || is_in_double_quote(string,i)==0 || is_escaped(string,i)==0);
-}
-void skip_spaces(char *str, int *i)
+void	skip_spaces(char *str, int *i)
 {
-    if (str == NULL || i == NULL)
-        return;
-
-    while (str[*i] == ' ')
-        (*i)++;
+	if (str == NULL || i == NULL)
+		return ;
+	while (str[*i] == ' ')
+		(*i)++;
 }
 
 /*return the indice of the error*/
-int check_error(char *s){
-    int i;
-    int j;
-    int red;
-    i=0;
-    while(s[i]!=0 && !(s[i]=='|' && is_quote_escaped(s,i)==0) ){
-        red=check_redirection(s+i);
-        if(red!=-1){
-            if(red==3 || red==2){
-                i++;
-            }
-            i++;
-            skip_spaces(s,&i);
-            if(s[i]==0 || (s[i]=='|' && is_quote_escaped(s,i)==0) || check_redirection(s+i)!=-1)
-            {
-                return i;
-            }
-        }
-        i++;
-    }
-    j=0;
-    while(s[j]!=0 && !(s[j]=='|' && is_quote_escaped(s,j)==0)){
-        if(s[j]!=' '){
-            return -1;
-        }
-        j++;
-    }
-    if(s[j]==0)
-        return 0;
-    return i;
+int	check_str(char *s)
+{
+	int	j;
+
+	j = 0;
+	while (s[j] != 0 && !(s[j] == '|' && is_quote_escaped(s, j) == 0))
+	{
+		if (s[j] != ' ')
+		{
+			return (-1);
+		}
+		j++;
+	}
+	if (s[j] == 0)
+		return (0);
+	return (-2);
 }
 
-int rec_check(char *s,int* start){
-    int i=0;
-    if(s==0 || s[0]==0)
-        return -1;
-    int c=check_error(s);
-    if(c!=-1)
-        return c;
-    while(s[i]!=0 && !(s[i]=='|' && is_quote_escaped(s,i)==0)){
-        i++;
-    }
-    if(s[i]==0){
-        return -1;
-    }
-    *start=*start+i+1;
-    return rec_check(s+i+1,start);
+int	check_error2(char *s, int start)
+{
+	int	i;
+	int	j;
+	int	red;
+
+	i = start;
+	while (s[i] != 0 && !(s[i] == '|' && is_quote_escaped(s, i) == 0))
+	{
+		red = check_redirection_2(s, i);
+		if (red != -1)
+		{
+			if (red == 3 || red == 2)
+				i++;
+			i++;
+			skip_spaces(s, &i);
+			if (s[i] == 0 || (s[i] == '|' && is_quote_escaped(s, i) == 0)
+				|| check_redirection_2(s, i) != -1)
+				return (i);
+		}
+		i++;
+	}
+	j = check_str(s);
+	if (j != -2)
+		return (j);
+	return (i);
 }

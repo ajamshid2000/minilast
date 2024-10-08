@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_fcommands.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/19 16:00:39 by ajamshid         ###   ########.fr       */
+/*   Updated: 2024/10/01 07:15:07 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ t_fcommand	**reallocate_fcommand_array(t_fcommand **fcommand,
 	return (new_fcommand);
 }
 
-/* Main function to ensure fcommand capacity,
-	decomposed into smaller function */
 int	ensure_fcommand_capacity(t_commands *commands, int required_size)
 {
 	t_fcommand	**new_fcommand;

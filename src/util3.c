@@ -6,30 +6,12 @@
 /*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/14 08:24:27 by famana           ###   ########.fr       */
+/*   Updated: 2024/09/20 10:47:23 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
-
-/* Function to process a single redirection */
-int	process_redirection(char **args_with_redirect, int *index)
-{
-	int	redirection_type;
-
-	redirection_type = check_redirection(args_with_redirect[*index]);
-	if (redirection_type >= 0)
-	{
-		if (validate_redirection(args_with_redirect, index) < 0)
-		{
-			return (-1);
-		}
-		(*index)++;
-	}
-	(*index)++;
-	return (0);
-}
 
 /* Function to check initial redirection validity */
 int	check_redirection_validity(char **args_with_redirect, int *index)

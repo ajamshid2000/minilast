@@ -6,7 +6,7 @@
 /*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/17 09:52:51 by famana           ###   ########.fr       */
+/*   Updated: 2024/10/01 07:13:32 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,45 +49,17 @@ int	allocate_and_check_memory(char *input, char **spaced,
 	return (1);
 }
 
-/* Function to check for redirection and pipes */
-/*int	check_redirections_and_pipes(char **splited_command, char *spaced)
-{
-	if (redirection_checker(splited_command) != 0
-		|| pipe_checker(splited_command) != 0)
-	{
-		free(spaced);
-		free(splited_command);
-		return (0);
-	}
-	return (1);
-}*/
 int	check_redirections_and_pipes(char **splited_command, char *spaced)
 {
 	(void)spaced;
 	if (pipe_checker(splited_command) != 0)
 	{
-		ft_putstr_fd("parse error near `|'", 2);
+		ft_putstr_fd(" syntax error near unexpected token `|'\n", 2);
 		return (0);
 	}
 	return (1);
 }
 
-int	redirection_checker(char **args_with_redirect)
-{
-	int	index;
-
-	index = 0;
-	while (args_with_redirect[index] != NULL)
-	{
-		if (process_redirection(args_with_redirect, &index) < 0)
-		{
-			return (-1);
-		}
-	}
-	return (0);
-}
-
-/* The provided check_redirection function */
 int	check_redirection(char *s)
 {
 	if (s == NULL || s[0] == 0)
@@ -99,6 +71,28 @@ int	check_redirection(char *s)
 	if (s[0] == '>' && s[1] == '>')
 		return (2);
 	if (s[0] == '>')
+		return (0);
+	return (-1);
+}
+
+int	check_redirection_2(char *s, int i)
+{
+	int			is_escaped;
+	int			len;
+
+	if (s == NULL || s[i] == 0)
+		return (-1);
+	len = (int)ft_strlen(s);
+	is_escaped = is_quote_escaped(s, i);
+	if (is_escaped == 0 && s[i] == '<' && i + 1 < len && s[i + 1] == '<'
+		&& is_quote_escaped(s, i + 1) == 0)
+		return (3);
+	if (is_escaped == 0 && s[i] == '<')
+		return (1);
+	if (is_escaped == 0 && s[i] == '>' && i + 1 < len && s[i + 1] == '>'
+		&& is_quote_escaped(s, i + 1) == 0)
+		return (2);
+	if (is_escaped == 0 && s[i] == '>')
 		return (0);
 	return (-1);
 }

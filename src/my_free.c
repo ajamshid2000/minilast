@@ -6,7 +6,7 @@
 /*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/11 12:01:39 by famana           ###   ########.fr       */
+/*   Updated: 2024/09/30 09:11:06 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,17 @@ void	free_input_split(char *input, char **splited_command)
 	}
 	free(splited_command);
 	free(input);
+}
+
+void	free_split(char **splited_command)
+{
+	int	i;
+
+	i = 0;
+	while (splited_command[i] != 0)
+	{
+		free(splited_command[i]);
+		i++;
+	}
+	free(splited_command);
 }

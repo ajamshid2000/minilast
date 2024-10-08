@@ -3,131 +3,129 @@
 /*                                                        :::      ::::::::   */
 /*   add_redirection.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 15:19:39 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/19 16:54:10 by ajamshid         ###   ########.fr       */
+/*   Updated: 2024/10/01 07:13:02 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-void	knock_out_char(char *str, char c)
-{
-	int	i = 0, j;
-
-	i = 0, j = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] != c)
-		{
-			str[j] = str[i];
-			j++;
-		}
-		i++;
-	}
-	str[j] = '\0';
-}
-
-int	check_validity_of_outfile(char *name, int i)
-{
-	int	temp;
-
-	if (i == 2)
-	{
-		temp = open(name, O_CREAT | O_RDWR | O_TRUNC, S_IRUSR | S_IWUSR);
-		if (temp < 0)
-		{
-			print_error_write(name);
-			return (1);
-		}
-		close(temp);
-	}
-	else
-	{
-		temp = open(name, O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR);
-		if (temp < 0)
-		{
-			print_error_write(name);
-			return (1);
-		}
-		close(temp);
-	}
-	return (0);
-}
-
 /* Function to add output redirection filename to the redirections structure */
-void	add_output_redirection(t_commands *commands, int id_cmd, char *filename)
+t_commands	*add_output_redirection(t_commands *commands, int id_cmd,
+		char *filename)
 {
 	char	**ntab;
 	int		i;
 
 	ntab = add_string_to_table(commands->fcommand[id_cmd]->redirections->out,
 			filename);
+	if (ntab == NULL)
+	{
+		my_free_cmd(commands);
+		printf("Memory allocation for fcommand array failed!\n");
+		return (NULL);
+	}
 	i = 0;
 	while (ntab[i])
 		i++;
 	commands->fcommand[id_cmd]->redirections->last_out_name = ntab[i - 1];
 	commands->fcommand[id_cmd]->redirections->out = ntab;
+	return (commands);
 }
 
-/* Main function decomposed into smaller functions*/
-void	add_out(t_commands *commands, int id_cmd, char *filename)
+t_commands	*add_out(t_commands *commands, int id_cmd, char *filename)
 {
-	initialize_fcommand_array(commands);
-	initialize_fcommand_element(commands, id_cmd);
-	initialize_redirections(commands, id_cmd);
+	commands = initialize_fcommand_array(commands);
+	if (commands == NULL)
+		return (NULL);
+	commands = initialize_fcommand_element(commands, id_cmd);
+	if (commands == NULL)
+		return (NULL);
+	commands = initialize_redirections(commands, id_cmd);
+	if (commands == NULL)
+		return (NULL);
 	if (commands->fcommand[id_cmd]->error == 1)
-		return ;
+		return (commands);
 	knock_out_char(filename, '"');
-	add_output_redirection(commands, id_cmd, filename);
+	commands = add_output_redirection(commands, id_cmd, filename);
+	if (commands == NULL)
+	{
+		return (NULL);
+	}
 	if (check_validity_of_outfile(filename, 2))
 		commands->fcommand[id_cmd]->error = 1;
 	commands->fcommand[id_cmd]->redirections->last_out = 2;
+	return (commands);
 }
 
 /* Function to add the filename to the append redirection list*/
-void	add_append_redirection(t_commands *commands, int id_cmd, char *filename)
+t_commands	*add_append_redirection(t_commands *commands, int id_cmd,
+		char *filename)
 {
 	char	**ntab;
 	int		i;
 
 	ntab = add_string_to_table(commands->fcommand[id_cmd]->redirections->append,
 			filename);
+	if (ntab == NULL)
+	{
+		my_free_cmd(commands);
+		printf("Memory allocation for fcommand array failed!\n");
+		return (NULL);
+	}
 	i = 0;
 	while (ntab[i])
 		i++;
 	commands->fcommand[id_cmd]->redirections->last_out_name = ntab[i - 1];
 	commands->fcommand[id_cmd]->redirections->append = ntab;
+	return (commands);
 }
 
-/* Main function decomposed into smaller functions */
-void	add_append(t_commands *commands, int id_cmd, char *filename)
+t_commands	*add_append(t_commands *commands, int id_cmd, char *filename)
 {
-	initialize_fcommand_array(commands);
-	initialize_fcommand_element(commands, id_cmd);
-	initialize_redirections(commands, id_cmd);
+	commands = initialize_fcommand_array(commands);
+	if (commands == NULL)
+		return (NULL);
+	commands = initialize_fcommand_element(commands, id_cmd);
+	if (commands == NULL)
+		return (NULL);
+	commands = initialize_redirections(commands, id_cmd);
+	if (commands == NULL)
+		return (NULL);
 	if (commands->fcommand[id_cmd]->error == 1)
-		return ;
+		return (commands);
 	knock_out_char(filename, '"');
-	add_append_redirection(commands, id_cmd, filename);
+	commands = add_append_redirection(commands, id_cmd, filename);
+	if (commands == NULL)
+		return (NULL);
 	if (check_validity_of_outfile(filename, 1))
 		commands->fcommand[id_cmd]->error = 1;
 	commands->fcommand[id_cmd]->redirections->last_out = 1;
+	return (commands);
 }
 
 /* Function to add the filename to the input redirection list */
-void	add_input_redirection(t_commands *commands, int id_cmd, char *filename)
+t_commands	*add_input_redirection(t_commands *commands, int id_cmd,
+		char *filename)
 {
 	char	**ntab;
 	int		i;
 
 	ntab = add_string_to_table(commands->fcommand[id_cmd]->redirections->in,
 			filename);
+	if (ntab == NULL)
+	{
+		my_free_cmd(commands);
+		printf("Memory allocation for fcommand array failed!\n");
+		return (NULL);
+	}
 	i = 0;
 	while (ntab[i])
 		i++;
 	commands->fcommand[id_cmd]->redirections->last_in_name = ntab[i - 1];
 	commands->fcommand[id_cmd]->redirections->in = ntab;
+	return (commands);
 }

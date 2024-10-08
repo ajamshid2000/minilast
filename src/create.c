@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   create.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdul-rashed <abdul-rashed@student.42.f    +#+  +:+       +#+        */
+/*   By: famana <famana@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 17:25:52 by ajamshid          #+#    #+#             */
-/*   Updated: 2024/09/16 00:15:40 by abdul-rashe      ###   ########.fr       */
+/*   Updated: 2024/09/20 11:38:25 by famana           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-t_env	*create_env_stack()
+t_env	*create_env_stack(void)
 {
-	t_env	*env;
-	t_env	*temp;
-	int		i;
-	extern char **environ;
+	t_env			*env;
+	t_env			*temp;
+	int				i;
+	extern char		**environ;
 
 	env = (t_env *)malloc(sizeof(t_env));
 	if (env == NULL)
